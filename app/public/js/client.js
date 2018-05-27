@@ -61,19 +61,37 @@ $(document).ready(function () {
                 ]
             };
 
-            // AJAX post the data to the friends API.
-            $.post("/api/friends", userData, function (data) {
-                if (data) {
-                    alert("Yay! You are added!");
+            $.get("/api/friends").then(function (friends) {
+                var diffsArray = [];
+                for (var i = 0; i < friends.length; i++) {
+                    var diffs = [];
+                    for (var j = 0; j<10;j++) {
+                        diffs.push(Math.abs(userData.scores[j]-friends[i].scores[j]));
+                    }
+
+                    // diffsArray.push(diffs);
+                    console.log('diffs: ' + diffs);
+                    // console.log('diffs array: ' + diffsArray);
+                    
                 }
-                // Grab the result from the AJAX post so that the best match's name and photo are displayed.
-                // $("#match-name").text(data.name);
-                // $("#match-img").attr("src", data.photo);
-
-                // // Show the modal with the best match
-                // $("#results-modal").modal("toggle");
-
+                addToFriends();
             });
+
+            // AJAX post the data to the friends API.
+            function addToFriends() {
+                $.post("/api/friends", userData, function (data) {
+                    if (data) {
+                        alert("Yay! You are added!");
+                    }
+                    // Grab the result from the AJAX post so that the best match's name and photo are displayed.
+                    // $("#match-name").text(data.name);
+                    // $("#match-img").attr("src", data.photo);
+
+                    // // Show the modal with the best match
+                    // $("#results-modal").modal("toggle");
+
+                });
+            }
         } else {
             alert("Please fill out all fields before submitting!");
         }
